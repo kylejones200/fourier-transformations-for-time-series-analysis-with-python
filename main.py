@@ -40,7 +40,7 @@ def main():
     output_dir.mkdir(exist_ok=True)
     
     if config['analysis']['run_synthetic']:
-                np.random.seed(config['data']['synthetic']['seed'])
+        np.random.seed(config['data']['synthetic']['seed'])
         time = np.linspace(0, config['data']['synthetic']['time_end'], 
                          config['data']['synthetic']['n_samples'])
         signal = generate_synthetic_signal(
@@ -60,7 +60,7 @@ def main():
                             "Frequency Domain Representation")
     
     if config['analysis']['run_airline']:
-                time, y = load_airline_data()
+        time, y = load_airline_data()
         
         plot_time_series(time, y, output_dir / 'airline_data.png',
                        "Original Airline Passenger Data", 
@@ -72,7 +72,7 @@ def main():
                             "Frequency Domain of Airline Passenger Data")
     
     if config['analysis']['run_noise_filtering']:
-                time, y = load_airline_data()
+        time, y = load_airline_data()
         noisy_signal = add_noise(y, config['data']['noise']['level'], 
                                config['data']['synthetic']['seed'])
         

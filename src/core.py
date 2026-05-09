@@ -49,7 +49,7 @@ def add_noise(signal: np.ndarray, noise_level: float = 50, seed: int = None) -> 
 
 def plot_time_series(time: np.ndarray, signal: np.ndarray, output_path: Path,
                     title: str, xlabel: str = "Time", ylabel: str = "Amplitude"):
- """Plot time series """
+    """Plot time series """
     fig, ax = plt.subplots(figsize=(10, 4))
     
     ax.plot(time, signal, color="#4A90A4", linewidth=1.2)
@@ -61,7 +61,7 @@ def plot_time_series(time: np.ndarray, signal: np.ndarray, output_path: Path,
 
 def plot_frequency_domain(frequencies: np.ndarray, fft_result: np.ndarray,
                          output_path: Path, title: str):
- """Plot frequency domain representation """
+    """Plot frequency domain representation """
     fig, ax = plt.subplots(figsize=(10, 4))
     
     n = len(frequencies) // 2
@@ -74,7 +74,7 @@ def plot_frequency_domain(frequencies: np.ndarray, fft_result: np.ndarray,
 
 def plot_noise_filtering(time: np.ndarray, noisy_signal: np.ndarray,
                          filtered_signal: np.ndarray, output_path: Path):
- """Plot noise filtering comparison """
+    """Plot noise filtering comparison """
     fig, ax = plt.subplots(figsize=(10, 6))
     
     ax.plot(time, noisy_signal, label="Noisy Signal", color="#8B6F9E", 
