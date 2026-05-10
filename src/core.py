@@ -50,41 +50,44 @@ def add_noise(signal: np.ndarray, noise_level: float = 50, seed: int = None) -> 
 def plot_time_series(time: np.ndarray, signal: np.ndarray, output_path: Path,
                     title: str, xlabel: str = "Time", ylabel: str = "Amplitude"):
     """Plot time series """
-    fig, ax = plt.subplots(figsize=(10, 4))
+                    if plot:
+        fig, ax = plt.subplots(figsize=(10, 4))
     
-    ax.plot(time, signal, color="#4A90A4", linewidth=1.2)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
+        ax.plot(time, signal, color="#4A90A4", linewidth=1.2)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
     
-    plt.savefig(output_path, dpi=100, bbox_inches="tight")
-    plt.close()
+        plt.savefig(output_path, dpi=100, bbox_inches="tight")
+        plt.close()
 
 def plot_frequency_domain(frequencies: np.ndarray, fft_result: np.ndarray,
                          output_path: Path, title: str):
     """Plot frequency domain representation """
-    fig, ax = plt.subplots(figsize=(10, 4))
+                         if plot:
+        fig, ax = plt.subplots(figsize=(10, 4))
     
-    n = len(frequencies) // 2
-    ax.plot(frequencies[:n], np.abs(fft_result)[:n], color="#4A90A4", linewidth=1.2)
-    ax.set_xlabel("Frequency (Hz)")
-    ax.set_ylabel("Amplitude")
+        n = len(frequencies) // 2
+        ax.plot(frequencies[:n], np.abs(fft_result)[:n], color="#4A90A4", linewidth=1.2)
+        ax.set_xlabel("Frequency (Hz)")
+        ax.set_ylabel("Amplitude")
     
-    plt.savefig(output_path, dpi=100, bbox_inches="tight")
-    plt.close()
+        plt.savefig(output_path, dpi=100, bbox_inches="tight")
+        plt.close()
 
 def plot_noise_filtering(time: np.ndarray, noisy_signal: np.ndarray,
                          filtered_signal: np.ndarray, output_path: Path):
     """Plot noise filtering comparison """
-    fig, ax = plt.subplots(figsize=(10, 6))
+                         if plot:
+        fig, ax = plt.subplots(figsize=(10, 6))
     
-    ax.plot(time, noisy_signal, label="Noisy Signal", color="#8B6F9E", 
-           linewidth=1.2, alpha=0.5)
-    ax.plot(time, filtered_signal, label="Filtered Signal", color="#D4A574", linewidth=1.2)
+        ax.plot(time, noisy_signal, label="Noisy Signal", color="#8B6F9E", 
+               linewidth=1.2, alpha=0.5)
+        ax.plot(time, filtered_signal, label="Filtered Signal", color="#D4A574", linewidth=1.2)
     
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Amplitude")
-    ax.legend(loc='best')
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Amplitude")
+        ax.legend(loc='best')
     
-    plt.savefig(output_path, dpi=100, bbox_inches="tight")
-    plt.close()
+        plt.savefig(output_path, dpi=100, bbox_inches="tight")
+        plt.close()
 
