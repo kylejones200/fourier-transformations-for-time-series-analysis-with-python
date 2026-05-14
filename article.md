@@ -6,7 +6,7 @@ patterns in time series data through frequency analysis and signal...
 #### Fourier Transforms are a mathematical framework for finding hidden patterns in time series data through frequency analysis and signal decomposition
 Time series data often contains hidden periodic patterns that are difficult to identify through direct observation. Fourier Transformations provide a mathematical framework to decompose these complex signals into their fundamental frequency components, revealing underlying patterns and cycles that might otherwise remain undetected.
 
-The **Fourier Transform** converts a time series from the **time domain** (data as observed over time) to the **frequency domain** (data as periodic signals). Essentially, it expresses a time series as a sum of sine and cosine waves with different frequencies and amplitudes.
+The Fourier Transform converts a time series from the time domain (data as observed over time) to the frequency domain (data as periodic signals). Essentially, it expresses a time series as a sum of sine and cosine waves with different frequencies and amplitudes.
 
 ### Why Use Fourier Transformations in Time Series?
 Financial markets use Fourier analysis to detect trading cycles and seasonal patterns in asset prices. By decomposing price movements into their frequency components, analysts can distinguish between short-term fluctuations and longer-term trends, informing trading strategies and risk management decisions.
@@ -24,15 +24,15 @@ Suppose we have a synthetic time series combining two sine waves with different 
 
 
 #### Fourier Transform to Analyze Frequencies
-Now, apply the **Fast Fourier Transform (FFT)** to extract the frequency components.
+Now, apply the Fast Fourier Transform (FFT) to extract the frequency components.
 
 
 
 #### What Do We See?
-The plot reveals peaks at **2 Hz** and **5 Hz**, corresponding to the two frequencies in the time series. These peaks show the dominant cycles in the data.
+The plot reveals peaks at 2 Hz and 5 Hz, corresponding to the two frequencies in the time series. These peaks show the dominant cycles in the data.
 ### Example 2: Fourier Transform on Real-World Data 
 
-Let's use Fourier Transform to analyze a seasonal time series, such as the **airline passengers dataset**.
+Let's use Fourier Transform to analyze a seasonal time series, such as the airline passengers dataset.
 
 
 
@@ -48,7 +48,7 @@ We can use Fourier Transform to filter out high-frequency noise.
 The filtered signal closely matches the original signal, showing how Fourier Transform can effectively remove noise while preserving the key patterns.
 
 #### For Extremely Large Data: FFTW
-For very large datasets or performance-critical applications, you can use **FFTW** (Fastest Fourier Transform in the West) or other specialized libraries for even faster FFT calculations.
+For very large datasets or performance-critical applications, you can use FFTW (Fastest Fourier Transform in the West) or other specialized libraries for even faster FFT calculations.
 
 Python's `scipy.fft` module provides bindings for FFTW, offering improved performance for certain scenarios:
 
