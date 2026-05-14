@@ -1,3 +1,4 @@
+import signalplot
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,12 +13,7 @@ from pathlib import Path
 import pywt
 
 # Set style
-plt.rcParams.update({
-    'axes.grid': False,
-    'font.family': 'serif',
-    'axes.spines.top': False,
-    'axes.spines.right': False
-})
+signalplot.apply(font_family='serif')
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 
