@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Set random seeds
-np.random.seed(42)
 try:
     import tensorflow as tf
     tf.random.set_seed(42)
@@ -307,6 +306,7 @@ if anomalies.sum() > 0:
 
 # Code block 7
 from scipy.fft import fft, fftfreq
+np.random.seed(42)
 
 # Fourier Transform
 fft_values = fft(ts.values)

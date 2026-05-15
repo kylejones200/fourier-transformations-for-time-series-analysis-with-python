@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 from scipy.fft import fft, ifft, fftfreq
 from sktime.datasets import load_airline
 import logging
+np.random.seed(42)
 
 # Example 1: Synthetic time series with two frequencies
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
-np.random.seed(42)
 time = np.linspace(0, 10, 500)
 freq1, freq2 = 2, 5
 signal = np.sin(2 * np.pi * freq1 * time) + 0.5 * np.sin(2 * np.pi * freq2 * time)

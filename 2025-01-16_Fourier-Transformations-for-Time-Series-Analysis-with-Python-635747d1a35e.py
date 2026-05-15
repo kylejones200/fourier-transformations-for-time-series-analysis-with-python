@@ -7,8 +7,8 @@
 from scipy.fft import fft, ifft
 import matplotlib.pyplot as plt
 import numpy as np
-
 np.random.seed(42)
+
 time = np.linspace(0, 10, 500)  # 500 time points
 freq1, freq2 = 2, 5  # Frequencies in Hz
 signal = np.sin(2 * np.pi * freq1 * time) + 0.5 * np.sin(2 * np.pi * freq2 * time)

@@ -9,14 +9,12 @@ data:
   noise:
     level: 50
     threshold: 0.1
-
+  seed: 42
 output:
-  figures_dir: "images"
-  figure_format: "png"
+  figures_dir: images
+  figure_format: png
   figure_dpi: 100
-
 analysis:
   run_synthetic: true
   run_airline: true
   run_noise_filtering: true
-
