@@ -3,6 +3,9 @@
 Generated script to create Tufte-style visualizations
 """
 
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
 import logging
 
 import signalplot
@@ -17,14 +20,6 @@ import numpy as np
 import pandas as pd
 
 # Set random seeds
-try:
-    import tensorflow as tf
-
-    tf.random.set_seed(42)
-except ImportError:
-    tf = None
-except Exception:
-    tf = None
 
 # Tufte-style configuration
 signalplot.apply(font_family="serif")
