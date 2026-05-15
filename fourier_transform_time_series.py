@@ -1,7 +1,6 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.fft import fft, ifft, fftfreq
+from scipy.fft import fft, ifft
 from sktime.datasets import load_airline
 import logging
 np.random.seed(42)
