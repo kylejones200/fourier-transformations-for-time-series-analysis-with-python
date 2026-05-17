@@ -106,28 +106,30 @@ def plot_noise_filtering(
     output_path: Path,
 ):
     """Plot noise filtering comparison"""
-    if plot:
-        fig, ax = plt.subplots(figsize=(10, 6))
+    if not plot:
+        return
 
-        ax.plot(
-            time,
-            noisy_signal,
-            label="Noisy Signal",
-            color="#8B6F9E",
-            linewidth=1.2,
-            alpha=0.5,
-        )
-        ax.plot(
-            time,
-            filtered_signal,
-            label="Filtered Signal",
-            color="#D4A574",
-            linewidth=1.2,
-        )
+    fig, ax = plt.subplots(figsize=(10, 6))
 
-        ax.set_xlabel("Time")
-        ax.set_ylabel("Amplitude")
-        ax.legend(loc="best")
+    ax.plot(
+        time,
+        noisy_signal,
+        label="Noisy Signal",
+        color="#8B6F9E",
+        linewidth=1.2,
+        alpha=0.5,
+    )
+    ax.plot(
+        time,
+        filtered_signal,
+        label="Filtered Signal",
+        color="#D4A574",
+        linewidth=1.2,
+    )
 
-        plt.savefig(output_path, dpi=100, bbox_inches="tight")
-        plt.close()
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Amplitude")
+    ax.legend(loc="best")
+
+    plt.savefig(output_path, dpi=100, bbox_inches="tight")
+    plt.close()
