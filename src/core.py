@@ -63,7 +63,7 @@ def plot_frequency_domain(frequencies: np.ndarray, fft_result: np.ndarray, outpu
     plt.savefig(output_path, dpi=100, bbox_inches='tight')
     plt.close()
 
-def plot_noise_filtering(time: np.ndarray, noisy_signal: np.ndarray, filtered_signal: np.ndarray, output_path: Path, plot: False=False):
+def plot_noise_filtering(time: np.ndarray, noisy_signal: np.ndarray, filtered_signal: np.ndarray, output_path: Path, plot: bool = False):
     """Plot noise filtering comparison"""
     if not plot:
         return
