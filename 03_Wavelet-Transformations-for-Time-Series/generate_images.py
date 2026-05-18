@@ -3,21 +3,19 @@
 Generated script to create Tufte-style visualizations
 """
 
-import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
 import logging
-
-import signalplot
-
-logger = logging.getLogger(__name__)
-
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pywt
+import signalplot
+from scipy.fft import fft, fftfreq
+
+logger = logging.getLogger(__name__)
+
+
 
 # Set random seeds
 
@@ -44,7 +42,6 @@ plt.savefig = savefig_tufte
 # Code blocks from article
 
 # Code block 1
-import pywt
 
 # Set style
 
@@ -84,7 +81,6 @@ plt.tight_layout()
 plt.savefig("co2_series.png", dpi=300, bbox_inches="tight")
 plt.show()
 
-
 # Code block 2
 # Perform wavelet decomposition
 wavelet = "db4"  # Daubechies 4 wavelet - good balance of smoothness and localization
@@ -104,7 +100,6 @@ for i, detail in enumerate(cD):
 reconstructed = pywt.waverec(coeffs, wavelet)
 reconstruction_error = np.mean(np.abs(ts.values - reconstructed[: len(ts)]))
 logger.info(f"\nReconstruction error: {reconstruction_error:.6f}")
-
 
 # Code block 3
 # Visualize decomposition
@@ -140,7 +135,6 @@ plt.show()
 def wavelet_denoise(data, wavelet="db4", threshold_mode="soft", level=5):
     """
     Denoise signal using wavelet thresholding.
-
     Parameters:
     -----------
     data : array-like
@@ -158,10 +152,8 @@ def wavelet_denoise(data, wavelet="db4", threshold_mode="soft", level=5):
         Denoised signal
     """
     coeffs = pywt.wavedec(data, wavelet, level=level)
-
     sigma = np.median(np.abs(coeffs[-1])) / 0.6745  # Median absolute deviation
     threshold = sigma * np.sqrt(2 * np.log(len(data)))
-
     # Apply threshold to detail coefficients (keep approximation)
     coeffs_thresh = [coeffs[0]]  # Keep approximation
     for c in coeffs[1:]:  # Threshold detail coefficients
@@ -197,7 +189,6 @@ logger.info(f"Noise standard deviation: {np.std(noise):.4f}")
 logger.info(
     f"Signal-to-noise ratio improvement: {np.std(ts.values) / np.std(noise):.2f}x"
 )
-
 
 # Code block 5
 # Continuous Wavelet Transform for time-frequency analysis
@@ -246,28 +237,22 @@ logger.info(f"Scale power: {scale_power[dominant_scale_idx]:.2f}")
 def detect_anomalies_wavelet(data, wavelet="db4", threshold_factor=3, level=5):
     """
     Detect anomalies using wavelet decomposition.
-
     Anomalies appear as large coefficients in detail levels.
     """
     coeffs = pywt.wavedec(data, wavelet, level=level)
-
     # Focus on detail coefficients (high-frequency anomalies)
     detail_coeffs = coeffs[1:]
-
     anomalies = np.zeros(len(data), dtype=bool)
     anomaly_scores = np.zeros(len(data))
-
     for i, detail in enumerate(detail_coeffs):
         if len(detail) > 0:
             # Use robust statistics (median, MAD)
             median_detail = np.median(np.abs(detail))
             mad = np.median(np.abs(np.abs(detail) - median_detail))
             threshold = median_detail + threshold_factor * (mad / 0.6745)
-
             # Find anomalies in this detail level
             detail_abs = np.abs(detail)
             anomaly_mask = detail_abs > threshold
-
             # Map back to original time indices
             scale_factor = len(data) // len(detail)
             for idx in np.where(anomaly_mask)[0]:
@@ -325,9 +310,7 @@ if anomalies.sum() > 0:
         else f"Anomaly years: {anomaly_years}"
     )
 
-
 # Code block 7
-from scipy.fft import fft, fftfreq
 
 np.random.seed(42)
 
@@ -375,11 +358,9 @@ plt.tight_layout()
 plt.savefig("fourier_vs_wavelet.png", dpi=300, bbox_inches="tight")
 plt.show()
 
-
 # Code block 8
 # Complete code for reproducibility
 # All imports, data loading, wavelet analysis, and visualization
 # See individual code blocks above for full implementation
-
 
 logger.info("All images generated successfully!")

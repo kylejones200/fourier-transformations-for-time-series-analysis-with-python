@@ -1,130 +1,85 @@
 import logging
+from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.fft import fft, ifft
-from sktime.datasets import load_airline
+from src.core import (
+    add_noise,
+    compute_fft,
+    filter_noise,
+    generate_synthetic_signal,
+    inverse_fft,
+    load_airline_data,
+    plot_frequency_domain,
+    plot_noise_filtering,
+    plot_time_series,
+)
 
 
 def configure_logging() -> None:
-    np.random.seed(42)
-
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
+
+def run_synthetic_fft_demo(output_dir: Path) -> None:
+    np.random.seed(42)
     time = np.linspace(0, 10, 500)
-
-    freq1, freq2 = (2, 5)
-
-    signal = np.sin(2 * np.pi * freq1 * time) + 0.5 * np.sin(2 * np.pi * freq2 * time)
-
-    plt.figure(figsize=(10, 4))
-
-    plt.plot(time, signal)
-
-    plt.title("Time Series (Combination of Two Sine Waves)")
-
-    plt.xlabel("Time")
-
-    plt.ylabel("Amplitude")
-
-    plt.show()
-
-    fft_result = np.fft.fft(signal)
-
-    frequencies = np.fft.fftfreq(len(fft_result), d=time[1] - time[0])
-
-    plt.figure(figsize=(10, 4))
-
-    plt.plot(
-        frequencies[: len(frequencies) // 2], np.abs(fft_result)[: len(fft_result) // 2]
+    signal = generate_synthetic_signal(time, freq1=2, freq2=5)
+    plot_time_series(
+        time,
+        signal,
+        output_dir / "synthetic_signal.png",
+        "Time Series (Combination of Two Sine Waves)",
+        plot=True,
     )
-
-    plt.title("Frequency Domain Representation")
-
-    plt.xlabel("Frequency (Hz)")
-
-    plt.ylabel("Amplitude")
-
-    plt.show()
-
-    y = load_airline()
-
-    y = y.values
-
-    time = np.arange(len(y))
-
-    fft_result = np.fft.fft(y)
-
-    frequencies = np.fft.fftfreq(len(fft_result), d=1)
-
-    plt.figure(figsize=(10, 4))
-
-    plt.plot(y)
-
-    plt.title("Original Airline Passenger Data")
-
-    plt.xlabel("Time")
-
-    plt.ylabel("Passengers")
-
-    plt.show()
-
-    plt.figure(figsize=(10, 4))
-
-    plt.plot(
-        frequencies[: len(frequencies) // 2], np.abs(fft_result)[: len(fft_result) // 2]
+    sample_rate = time[1] - time[0]
+    frequencies, fft_result = compute_fft(signal, sample_rate)
+    plot_frequency_domain(
+        frequencies,
+        fft_result,
+        output_dir / "synthetic_frequency_domain.png",
+        "Frequency Domain Representation",
+        plot=True,
     )
-
-    plt.title("Frequency Domain of Airline Passenger Data")
-
-    plt.xlabel("Frequency")
-
-    plt.ylabel("Amplitude")
-
-    plt.savefig("time_series_passanger.png")
-
-    plt.show()
-
-    noisy_signal = y + np.random.normal(0, 50, len(y))
-
-    fft_result_noisy = np.fft.fft(noisy_signal)
-
-    fft_filtered = fft_result_noisy.copy()
-
-    threshold = 0.1
-
-    fft_filtered[np.abs(frequencies) > threshold] = 0
-
-    filtered_signal = np.fft.ifft(fft_filtered)
-
-
-def example_4_fft_with_scipy() -> None:
-    plt.figure(figsize=(10, 6))
-
-    plt.plot(time, noisy_signal, label="Noisy Signal", alpha=0.5)
-
-    plt.plot(time, filtered_signal.real, label="Filtered Signal", color="red")
-
-    plt.title("Noise Filtering with Fourier Transform")
-
-    plt.xlabel("Time")
-
-    plt.ylabel("Amplitude")
-
-    plt.legend()
-
-    plt.savefig("time_series_passanger_amp.png")
-
-    plt.show()
-
     fft_result_scipy = fft(signal)
+    ifft(fft_result_scipy)
 
-    ifft_result_scipy = ifft(fft_result_scipy)
+
+def run_airline_fft_demo(output_dir: Path) -> None:
+    time, y = load_airline_data()
+    plot_time_series(
+        time,
+        y,
+        output_dir / "airline_data.png",
+        "Original Airline Passenger Data",
+        ylabel="Passengers",
+        plot=True,
+    )
+    frequencies, fft_result = compute_fft(y, sample_rate=1)
+    plot_frequency_domain(
+        frequencies,
+        fft_result,
+        output_dir / "time_series_passanger.png",
+        "Frequency Domain of Airline Passenger Data",
+        plot=True,
+    )
+    noisy_signal = add_noise(y, noise_level=50, seed=42)
+    frequencies, fft_result_noisy = compute_fft(noisy_signal, sample_rate=1)
+    fft_filtered = filter_noise(fft_result_noisy, frequencies, threshold=0.1)
+    filtered_signal = inverse_fft(fft_filtered)
+    plot_noise_filtering(
+        time,
+        noisy_signal,
+        filtered_signal,
+        output_dir / "time_series_passanger_amp.png",
+        plot=True,
+    )
 
 
 def main() -> None:
     configure_logging()
-    example_4_fft_with_scipy()
+    output_dir = Path(".")
+    run_synthetic_fft_demo(output_dir)
+    run_airline_fft_demo(output_dir)
 
 
 if __name__ == "__main__":

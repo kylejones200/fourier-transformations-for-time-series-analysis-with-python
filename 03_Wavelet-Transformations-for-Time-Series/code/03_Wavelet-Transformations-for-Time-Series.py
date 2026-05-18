@@ -1,18 +1,19 @@
 import logging
-
-import signalplot
-
-logger = logging.getLogger(__name__)
-
-# Extracted code from '03_Wavelet-Transformations-for-Time-Series.md'
-# Blocks appear in the same order as in the markdown article.
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pywt
+import signalplot
+from scipy.fft import fft, fftfreq
+
+logger = logging.getLogger(__name__)
+
+# Extracted code from '03_Wavelet-Transformations-for-Time-Series.md'
+# Blocks appear in the same order as in the markdown article.
+
+
 
 # Set style
 signalplot.apply(font_family="serif")
@@ -100,7 +101,6 @@ plt.show()
 def wavelet_denoise(data, wavelet="db4", threshold_mode="soft", level=5):
     """
     Denoise signal using wavelet thresholding.
-
     Parameters:
     -----------
     data : array-like
@@ -118,11 +118,9 @@ def wavelet_denoise(data, wavelet="db4", threshold_mode="soft", level=5):
         Denoised signal
     """
     coeffs = pywt.wavedec(data, wavelet, level=level)
-
     # Calculate threshold using universal threshold (Donoho & Johnstone)
     sigma = np.median(np.abs(coeffs[-1])) / 0.6745  # Median absolute deviation
     threshold = sigma * np.sqrt(2 * np.log(len(data)))
-
     # Apply threshold to detail coefficients (keep approximation)
     coeffs_thresh = [coeffs[0]]  # Keep approximation
     for c in coeffs[1:]:  # Threshold detail coefficients
@@ -211,29 +209,23 @@ logger.info(f"Scale power: {scale_power[dominant_scale_idx]:.2f}")
 def detect_anomalies_wavelet(data, wavelet="db4", threshold_factor=3, level=5):
     """
     Detect anomalies using wavelet decomposition.
-
     Anomalies appear as large coefficients in detail levels.
     """
     coeffs = pywt.wavedec(data, wavelet, level=level)
-
     # Focus on detail coefficients (high-frequency anomalies)
     detail_coeffs = coeffs[1:]
-
     # Calculate threshold for each detail level
     anomalies = np.zeros(len(data), dtype=bool)
     anomaly_scores = np.zeros(len(data))
-
     for i, detail in enumerate(detail_coeffs):
         if len(detail) > 0:
             # Use robust statistics (median, MAD)
             median_detail = np.median(np.abs(detail))
             mad = np.median(np.abs(np.abs(detail) - median_detail))
             threshold = median_detail + threshold_factor * (mad / 0.6745)
-
             # Find anomalies in this detail level
             detail_abs = np.abs(detail)
             anomaly_mask = detail_abs > threshold
-
             # Map back to original time indices
             scale_factor = len(data) // len(detail)
             for idx in np.where(anomaly_mask)[0]:
@@ -292,7 +284,6 @@ if anomalies.sum() > 0:
         else f"Anomaly years: {anomaly_years}"
     )
 
-from scipy.fft import fft, fftfreq
 
 # Fourier Transform
 fft_values = fft(ts.values)
